@@ -1,0 +1,8 @@
+{
+  "name": "AceClub Texas Bar",
+  "description": "德州扑克酒吧点菜与积分会员管理小程序",
+  "requestFramePermissions": [
+    "camera"
+  ],
+  "majorCapabilities": []
+}
