@@ -1,0 +1,43 @@
+<view class="page">
+  <view class="hero">
+    <view class="eyebrow">Texas Lounge</view>
+    <view class="hero-title">RIVER ACE 酒吧</view>
+    <view class="hero-subtitle">签到、点单、预约候桌、存酒提酒、员工确认全部走云函数。</view>
+  </view>
+
+  <view class="stats card">
+    <view>
+      <text class="muted">积分</text>
+      <text>{{user.points || 0}}</text>
+    </view>
+    <view>
+      <text class="muted">余额</text>
+      <text>¥{{user.balanceRMB || 0}}</text>
+    </view>
+    <view>
+      <text class="muted">等级</text>
+      <text>{{user.level || '-'}}</text>
+    </view>
+  </view>
+
+  <view class="action-grid">
+    <block wx:for="{{actions}}" wx:key="*this">
+      <button class="action" bindtap="tapAction" data-label="{{item}}">{{item}}</button>
+    </block>
+  </view>
+
+  <view class="card">
+    <view class="section-title">本周排行榜</view>
+    <block wx:for="{{leaderboard}}" wx:key="_id">
+      <view class="rank-row" wx:if="{{index < 5}}">
+        <text class="rank-no">{{index + 1}}</text>
+        <image class="avatar" src="{{item.avatar}}" mode="aspectFill" />
+        <view class="rank-main">
+          <text>{{item.name}}</text>
+          <text class="muted">{{item.level}}</text>
+        </view>
+        <text class="score">{{item.rankScore}}</text>
+      </view>
+    </block>
+  </view>
+</view>

@@ -1,0 +1,17 @@
+.red {
+  background: #7f2b1d;
+}
+
+.task {
+  margin-top: 24rpx;
+}
+
+.task-title {
+  margin-bottom: 12rpx;
+  font-size: 32rpx;
+  font-weight: 900;
+}
+
+.task .primary-btn {
+  margin-top: 18rpx;
+}

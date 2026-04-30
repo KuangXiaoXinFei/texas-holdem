@@ -1,154 +1,146 @@
-import { Shield, Flame, Wallet, Wine, History, ChevronRight, Settings } from 'lucide-react';
+import { CalendarClock, CheckCircle2, ChevronRight, CreditCard, Gift, MessageCircle, Share2, Shield, Wallet, Wine } from 'lucide-react';
 import { ReactNode } from 'react';
-import { motion } from 'motion/react';
+import { useState } from 'react';
 import { useAppContext } from '../store';
 
 export default function ProfileScreen() {
-  const { user, storedDrinks } = useAppContext();
+  const { user, storedDrinks, reservations, orders, recharge, createReservation, requestDrink, inviteFriend } = useAppContext();
+  const [guests, setGuests] = useState(6);
+  const [tableType, setTableType] = useState('标准德州桌');
+  const [timeSlot, setTimeSlot] = useState('今晚 20:00');
 
-  if (!user) return <div className="p-4 pt-10 text-center text-gray-500">加载中...</div>;
+  if (!user) return <div className="p-4 text-center text-[#8a7a69]">加载中...</div>;
 
-  const containerVariants = {
-    hidden: { opacity: 0 },
-    show: {
-      opacity: 1,
-      transition: {
-        staggerChildren: 0.1
-      }
-    }
-  };
-
-  const itemVariants = {
-    hidden: { opacity: 0, y: 10 },
-    show: { opacity: 1, y: 0 }
+  const submitReservation = async () => {
+    const ok = await createReservation({ tableType, guests, timeSlot, note: '小程序预约' });
+    alert(ok ? '预约成功，已进入候桌队列' : '预约失败');
   };
 
   return (
-    <motion.div 
-      className="p-4 space-y-6"
-      variants={containerVariants}
-      initial="hidden"
-      animate="show"
-    >
-      {/* User Card */}
-      <motion.div variants={itemVariants} className="bg-gradient-to-br from-zinc-900 to-zinc-800 rounded-3xl p-6 text-white shadow-xl">
-        <div className="flex justify-between items-start mb-6">
-           <div className="flex items-center space-x-4">
-             <div className="w-16 h-16 bg-zinc-800 border-2 border-amber-500 rounded-full overflow-hidden p-1 shadow-inner">
-                <img src={user.avatar} alt="Avatar" className="w-full h-full bg-white rounded-full object-cover" />
-             </div>
-             <div>
-               <h2 className="text-xl font-extrabold tracking-wide mb-1 flex items-center gap-2">
-                 {user.name}
-                 <Shield size={16} className="text-amber-500" />
-               </h2>
-               <span className="text-xs font-semibold bg-amber-500/20 text-amber-400 px-2.5 py-1 rounded-full border border-amber-500/30">
-                 {user.level}
-               </span>
-             </div>
-           </div>
-           <button className="text-gray-400 hover:text-white">
-             <Settings size={20} />
-           </button>
+    <div className="space-y-4 p-4">
+      <section className="rounded-[28px] bg-[#1a1a1d] p-5 text-white shadow-xl">
+        <div className="flex items-center gap-4">
+          <img src={user.avatar} alt={user.name} className="h-16 w-16 rounded-full border-2 border-amber-300 bg-white" />
+          <div className="min-w-0 flex-1">
+            <h2 className="truncate text-xl font-black">{user.name}</h2>
+            <p className="mt-1 inline-flex items-center gap-1 rounded-full bg-amber-300/15 px-3 py-1 text-xs font-bold text-amber-200">
+              <Shield size={13} />
+              {user.level}
+            </p>
+          </div>
         </div>
-
-        {/* Wealth Data */}
-        <div className="grid grid-cols-2 gap-4 pt-4 border-t border-white/10">
-           <div>
-             <p className="text-zinc-400 text-xs mb-1">可用积分</p>
-             <div className="flex items-end font-bold text-2xl text-amber-400">
-               <Flame size={20} className="mr-1 mb-1 shadow-sm" />
-               {user.points}
-             </div>
-           </div>
-           <div>
-             <p className="text-zinc-400 text-xs mb-1">可用余额 (元)</p>
-             <div className="flex items-end font-bold text-2xl">
-               <span className="text-base mr-1 mb-0.5">¥</span>
-               {user.balanceRMB}
-             </div>
-           </div>
+        <div className="mt-5 grid grid-cols-3 gap-2">
+          <Balance label="可用积分" value={user.points.toLocaleString()} />
+          <Balance label="账户余额" value={`¥${user.balanceRMB}`} />
+          <Balance label="连续签到" value={`${user.checkinStreak}天`} />
         </div>
-      </motion.div>
+      </section>
 
-      {/* Action Grid */}
-      <motion.div variants={itemVariants} className="grid grid-cols-3 gap-3">
-         <ActionCard icon={<Wallet size={24} className="text-blue-500" />} label="充值/买单" />
-         <ActionCard icon={<History size={24} className="text-purple-500" />} label="积分账单" />
-         <ActionCard icon={<Wine size={24} className="text-rose-500" />} label="存酒记录" badge={storedDrinks.length > 0 ? storedDrinks.length.toString() : undefined} />
-      </motion.div>
-
-      {/* Stored Drinks List */}
-      <motion.div variants={itemVariants} className="bg-white rounded-2xl shadow-sm border border-gray-100 overflow-hidden">
-        <div className="p-4 border-b border-gray-100 flex justify-between items-center">
-          <h3 className="font-bold flex items-center gap-2">
-            <Wine size={18} className="text-gray-800" />
-            我的存酒
-          </h3>
-          <button className="text-sm text-gray-500 flex items-center">
-            全部 <ChevronRight size={14} />
+      <section className="grid grid-cols-4 gap-2">
+        {[200, 500, 1000, 2000].map(amount => (
+          <button key={amount} onClick={async () => alert((await recharge(amount)) ? `充值 ${amount} 元成功` : '充值失败')} className="rounded-2xl bg-white p-3 text-center shadow-sm">
+            <Wallet className="mx-auto mb-2 text-[#b76e22]" size={20} />
+            <span className="text-xs font-black">充 {amount}</span>
           </button>
+        ))}
+      </section>
+
+      <section className="rounded-3xl border border-[#eadcc7] bg-white p-4 shadow-sm">
+        <div className="mb-4 flex items-center gap-2">
+          <CalendarClock size={20} className="text-[#b76e22]" />
+          <h3 className="font-black">预约 / 候桌</h3>
         </div>
-        <div>
-          {storedDrinks.length === 0 ? (
-            <div className="p-6 flex flex-col items-center justify-center text-gray-400">
-               <Wine size={32} className="mb-2 opacity-50" />
-               <p className="text-sm">暂无存酒记录</p>
+        <div className="grid grid-cols-3 gap-2">
+          <select value={tableType} onChange={event => setTableType(event.target.value)} className="rounded-2xl border border-[#eadcc7] bg-[#fffaf1] px-3 py-3 text-xs font-bold">
+            <option>标准德州桌</option>
+            <option>VIP 包厢桌</option>
+            <option>吧台观赛位</option>
+          </select>
+          <select value={guests} onChange={event => setGuests(Number(event.target.value))} className="rounded-2xl border border-[#eadcc7] bg-[#fffaf1] px-3 py-3 text-xs font-bold">
+            {[2, 4, 6, 8, 10].map(n => <option key={n}>{n}</option>)}
+          </select>
+          <select value={timeSlot} onChange={event => setTimeSlot(event.target.value)} className="rounded-2xl border border-[#eadcc7] bg-[#fffaf1] px-3 py-3 text-xs font-bold">
+            <option>今晚 20:00</option>
+            <option>今晚 21:30</option>
+            <option>明晚 19:30</option>
+          </select>
+        </div>
+        <button onClick={submitReservation} className="mt-3 w-full rounded-2xl bg-[#1a1a1d] py-3 text-sm font-black text-amber-300">提交预约</button>
+        <div className="mt-4 space-y-2">
+          {reservations.slice(0, 3).map(item => (
+            <div key={item.id} className="flex items-center justify-between rounded-2xl bg-[#f6f1e8] p-3">
+              <div>
+                <p className="text-sm font-black">#{item.queueNo} {item.tableType}</p>
+                <p className="text-xs text-[#8a7a69]">{item.guests} 人 · {item.timeSlot}</p>
+              </div>
+              <span className="rounded-full bg-[#163b34]/10 px-3 py-1 text-xs font-black text-[#163b34]">{item.status === 'seated' ? '已入座' : '候桌中'}</span>
             </div>
-          ) : storedDrinks.map(drink => (
-             <div key={drink.id} className="p-4 flex items-center justify-between border-b border-gray-50 last:border-0 hover:bg-gray-50 transition-colors">
-               <div className="flex items-center space-x-4">
-                  <div className="w-12 h-12 bg-gray-100 rounded-lg flex items-center justify-center text-xl">
-                    🍾
-                  </div>
-                  <div>
-                    <h4 className="font-bold text-gray-900">{drink.name}</h4>
-                    <p className="text-xs text-gray-500 mt-1">剩余 {drink.volumeLeft}</p>
-                  </div>
-               </div>
-               <div className="text-right flex flex-col items-end">
-                 <span className="text-xs bg-amber-50 text-amber-600 px-2 py-1 rounded font-medium mb-2">
-                   去提取
-                 </span>
-                 <p className="text-[10px] text-gray-400">至 {drink.expiryDate}</p>
-               </div>
-             </div>
           ))}
         </div>
-      </motion.div>
-      
-      {/* Settings List */}
-      <motion.div variants={itemVariants} className="bg-white rounded-2xl shadow-sm border border-gray-100 overflow-hidden mt-6 mb-2">
-         <ListItem title="我的二维码 / 入场凭证" />
-         <ListItem title="消息中心" badge="3" />
-         <ListItem title="联系客服 / 包房预订" isLast />
-      </motion.div>
-    </motion.div>
+      </section>
+
+      <section className="rounded-3xl border border-[#eadcc7] bg-white p-4 shadow-sm">
+        <div className="mb-3 flex items-center justify-between">
+          <h3 className="flex items-center gap-2 font-black"><Wine size={20} className="text-[#7f2b1d]" />我的存酒</h3>
+          <span className="text-xs font-bold text-[#8a7a69]">{storedDrinks.length} 瓶</span>
+        </div>
+        <div className="space-y-2">
+          {storedDrinks.map(drink => (
+            <div key={drink.id} className="flex items-center justify-between rounded-2xl bg-[#f6f1e8] p-3">
+              <div>
+                <p className="text-sm font-black">{drink.name}</p>
+                <p className="text-xs text-[#8a7a69]">剩余 {drink.volumeLeft} · 至 {drink.expiryDate}</p>
+              </div>
+              <button disabled={drink.status !== 'stored'} onClick={async () => alert((await requestDrink(drink.id)) ? '已通知员工取酒' : '操作失败')} className="rounded-full bg-[#7f2b1d] px-3 py-2 text-xs font-black text-white disabled:bg-[#d8c8b4]">
+                {drink.status === 'stored' ? '提取' : drink.status === 'requested' ? '待取' : '已取'}
+              </button>
+            </div>
+          ))}
+        </div>
+      </section>
+
+      <section className="rounded-3xl border border-[#eadcc7] bg-white shadow-sm">
+        <MenuItem icon={<CreditCard size={19} />} title="订单记录" value={`${orders.length} 笔`} />
+        <MenuItem icon={<Gift size={19} />} title="卡券兑换" value="pro 预留" />
+        <MenuItem icon={<MessageCircle size={19} />} title="联系客服" value="RiverAceClub" />
+        <button onClick={async () => alert((await inviteFriend()) ? '已发放邀请奖励' : '邀请失败')} className="flex w-full items-center justify-between p-4">
+          <span className="flex items-center gap-3 text-sm font-black"><Share2 size={19} className="text-[#b76e22]" />邀请好友</span>
+          <ChevronRight size={16} className="text-[#8a7a69]" />
+        </button>
+      </section>
+
+      <section className="rounded-3xl border border-[#eadcc7] bg-white p-4 shadow-sm">
+        <h3 className="mb-3 font-black">最近订单</h3>
+        <div className="space-y-2">
+          {orders.slice(0, 4).map(order => (
+            <div key={order.id} className="flex items-center justify-between rounded-2xl bg-[#f6f1e8] p-3">
+              <div className="min-w-0">
+                <p className="truncate text-sm font-black">{order.items.map(item => `${item.name}x${item.quantity}`).join('、')}</p>
+                <p className="text-xs text-[#8a7a69]">{order.createdAt}</p>
+              </div>
+              <span className="ml-3 flex items-center gap-1 text-xs font-black text-[#163b34]"><CheckCircle2 size={14} />{order.status}</span>
+            </div>
+          ))}
+        </div>
+      </section>
+    </div>
   );
 }
 
-function ActionCard({ icon, label, badge }: { icon: ReactNode, label: string, badge?: string }) {
+function Balance({ label, value }: { label: string; value: string }) {
   return (
-    <button className="bg-white p-4 rounded-2xl shadow-sm border border-gray-100 flex flex-col items-center justify-center relative active:scale-95 transition-transform">
-      {badge && (
-        <span className="absolute top-2 right-2 bg-red-500 text-white text-[10px] font-bold w-4 h-4 flex items-center justify-center rounded-full">
-          {badge}
-        </span>
-      )}
-      <div className="mb-2 bg-gray-50 p-3 rounded-full">{icon}</div>
-      <span className="text-xs font-semibold text-gray-700">{label}</span>
-    </button>
+    <div className="rounded-2xl bg-white/10 p-3">
+      <p className="text-[10px] font-bold text-white/55">{label}</p>
+      <p className="mt-1 truncate text-base font-black">{value}</p>
+    </div>
   );
 }
 
-function ListItem({ title, badge, isLast = false }: { title: string, badge?: string, isLast?: boolean }) {
+function MenuItem({ icon, title, value }: { icon: ReactNode; title: string; value: string }) {
   return (
-    <button className={`w-full p-4 flex items-center justify-between hover:bg-gray-50 transition-colors ${!isLast ? 'border-b border-gray-50' : ''}`}>
-       <span className="font-semibold text-gray-800 text-sm">{title}</span>
-       <div className="flex items-center space-x-2">
-         {badge && <span className="bg-red-500 text-white text-[10px] font-bold px-2 py-0.5 rounded-full">{badge}</span>}
-         <ChevronRight size={16} className="text-gray-300" />
-       </div>
-    </button>
+    <div className="flex items-center justify-between border-b border-[#eadcc7] p-4">
+      <span className="flex items-center gap-3 text-sm font-black text-[#2b2521]">{icon}{title}</span>
+      <span className="text-xs font-bold text-[#8a7a69]">{value}</span>
+    </div>
   );
 }

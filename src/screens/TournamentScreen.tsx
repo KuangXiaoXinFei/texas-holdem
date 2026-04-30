@@ -1,135 +1,86 @@
-import { Trophy, Clock, Users, Flame, Info } from 'lucide-react';
-import { motion } from 'motion/react';
+import { Clock, Flame, Trophy, Users } from 'lucide-react';
+import { ReactNode } from 'react';
 import { useAppContext } from '../store';
 
 export default function TournamentScreen() {
-  const { user, tournaments, registerTournament } = useAppContext();
+  const { user, tournaments, leaderboard, registerTournament } = useAppContext();
 
   const handleRegister = async (id: string, buyIn: number) => {
     if (!user) return;
     if (user.points < buyIn) {
-      alert('积分不足，无法报名该赛事！');
+      alert('积分不足，无法报名');
       return;
     }
-    const success = await registerTournament(id);
-    if (success) {
-      alert('报名成功！请准时参赛。');
-    } else {
-      alert('报名失败（可能是人数已满或已报名）。');
-    }
+    alert((await registerTournament(id)) ? '报名成功，请准时到场' : '报名失败，可能已报名或名额已满');
   };
 
-  if (!user) return <div className="p-4 pt-10 text-center text-gray-500">加载中...</div>;
+  if (!user) return <div className="p-4 text-center text-[#8a7a69]">加载中...</div>;
 
   return (
-    <div className="p-4 space-y-4">
-      {/* Header Info */}
-      <motion.div 
-        initial={{ opacity: 0, y: -20 }}
-        animate={{ opacity: 1, y: 0 }}
-        className="bg-zinc-900 text-white p-5 rounded-2xl shadow-lg relative overflow-hidden"
-      >
-         <div className="absolute top-0 right-0 opacity-10 transform translate-x-4 -translate-y-4">
-            <Trophy size={100} />
-         </div>
-         <h2 className="text-lg font-bold mb-1">今日赛事概览</h2>
-         <p className="text-zinc-400 text-sm mb-4">争夺最高荣誉与丰厚积分奖励</p>
-         <div className="flex items-center space-x-2 text-amber-400 text-sm font-bold bg-amber-400/10 inline-flex px-3 py-1.5 rounded-full">
-            <Flame size={16} />
-            <span>我的可用积分: {user.points}</span>
-         </div>
-      </motion.div>
+    <div className="space-y-4 p-4">
+      <section className="rounded-[28px] bg-[#163b34] p-5 text-white shadow-xl">
+        <p className="text-xs font-bold uppercase tracking-[0.28em] text-emerald-200">Leaderboard</p>
+        <h2 className="mt-3 text-2xl font-black">赛事与排行榜</h2>
+        <p className="mt-2 text-sm text-white/65">报名扣积分，成绩分用于榜单展示。</p>
+      </section>
 
-      {/* Tournament List */}
-      <motion.div 
-        className="space-y-4"
-        initial="hidden"
-        animate="show"
-        variants={{
-          hidden: { opacity: 0 },
-          show: { opacity: 1, transition: { staggerChildren: 0.1 } }
-        }}
-      >
+      <section className="rounded-3xl border border-[#eadcc7] bg-white p-4 shadow-sm">
+        <h3 className="mb-3 font-black">本周积分榜</h3>
+        <div className="space-y-3">
+          {leaderboard.map((item, index) => (
+            <div key={item.id} className="flex items-center gap-3">
+              <span className={`flex h-8 w-8 items-center justify-center rounded-full text-xs font-black ${index < 3 ? 'bg-[#1a1a1d] text-amber-300' : 'bg-[#f0e4d3] text-[#7a6c5f]'}`}>{index + 1}</span>
+              <img src={item.avatar} alt={item.name} className="h-10 w-10 rounded-full bg-[#f5ead8]" />
+              <div className="min-w-0 flex-1">
+                <p className="truncate text-sm font-black">{item.name}</p>
+                <p className="text-xs text-[#8a7a69]">{item.level}</p>
+              </div>
+              <span className="text-sm font-black text-[#163b34]">{item.rankScore}</span>
+            </div>
+          ))}
+        </div>
+      </section>
+
+      <section className="space-y-3">
         {tournaments.map(tournament => {
           const isRegistered = user.registeredTournaments.includes(tournament.id);
           const isFull = tournament.players >= tournament.maxPlayers;
-          const isOngoing = tournament.status === 'ongoing';
-
-          let statusBadge = (
-             <span className="bg-blue-100 text-blue-700 px-2 py-0.5 rounded text-xs font-bold">报名中</span>
-          );
-          if (isOngoing) statusBadge = <span className="bg-red-100 text-red-700 px-2 py-0.5 rounded text-xs font-bold">进行中</span>;
-          
+          const disabled = isRegistered || isFull || tournament.status !== 'registering';
           return (
-            <motion.div 
-              variants={{
-                hidden: { opacity: 0, y: 20 },
-                show: { opacity: 1, y: 0 }
-              }}
-              key={tournament.id} 
-              className="bg-white rounded-2xl p-5 shadow-sm border border-gray-100"
-            >
-               <div className="flex justify-between items-start mb-3">
-                 <div>
-                   <h3 className="font-bold text-gray-900 text-lg flex items-center gap-2">
-                     {tournament.name}
-                     {statusBadge}
-                   </h3>
-                 </div>
-               </div>
-
-               <div className="grid grid-cols-2 gap-y-3 gap-x-4 text-sm text-gray-600 mb-5">
-                 <div className="flex items-center space-x-2">
-                   <Clock size={16} className="text-gray-400" />
-                   <span>{tournament.time}</span>
-                 </div>
-                 <div className="flex items-center space-x-2">
-                   <Info size={16} className="text-gray-400" />
-                   <span>盲注 {tournament.blind}</span>
-                 </div>
-                 <div className="flex items-center space-x-2">
-                   <Users size={16} className="text-gray-400" />
-                   <span>
-                     {tournament.players}/{tournament.maxPlayers} 人
-                   </span>
-                 </div>
-                 <div className="flex items-center space-x-2">
-                   <Flame size={16} className="text-amber-500" />
-                   <span className="font-semibold text-gray-900">买入：{tournament.buyInPoints}</span>
-                 </div>
-               </div>
-
-               {/* Action Button */}
-               <button 
-                 onClick={() => handleRegister(tournament.id, tournament.buyInPoints)}
-                 disabled={isRegistered || isFull || isOngoing}
-                 className={`w-full py-3 rounded-xl font-bold flex items-center justify-center space-x-2 transition-all ${
-                   isRegistered 
-                     ? 'bg-green-100 text-green-700 cursor-not-allowed'
-                     : isOngoing
-                     ? 'bg-gray-100 text-gray-400 cursor-not-allowed'
-                     : isFull
-                     ? 'bg-gray-100 text-gray-400 cursor-not-allowed'
-                     : 'bg-zinc-900 text-amber-400 active:scale-95 hover:bg-zinc-800'
-                 }`}
-               >
-                 {isRegistered ? (
-                   <><span>已报名</span></>
-                 ) : isOngoing ? (
-                   <span>比赛已开始</span>
-                 ) : isFull ? (
-                   <span>名额已满</span>
-                 ) : (
-                   <>
-                     <Trophy size={18} />
-                     <span>立即参赛报名</span>
-                   </>
-                 )}
-               </button>
-            </motion.div>
-          )
+            <article key={tournament.id} className="rounded-3xl border border-[#eadcc7] bg-white p-4 shadow-sm">
+              <div className="flex items-start justify-between gap-3">
+                <div>
+                  <h3 className="text-lg font-black text-[#2b2521]">{tournament.name}</h3>
+                  <p className="mt-1 text-xs font-bold text-[#b76e22]">{tournament.prize}</p>
+                </div>
+                <span className="rounded-full bg-[#163b34]/10 px-3 py-1 text-xs font-black text-[#163b34]">{tournament.status === 'registering' ? '报名中' : tournament.status}</span>
+              </div>
+              <div className="mt-4 grid grid-cols-2 gap-3 text-sm">
+                <Info icon={<Clock size={15} />} value={tournament.time} />
+                <Info icon={<Users size={15} />} value={`${tournament.players}/${tournament.maxPlayers} 人`} />
+                <Info icon={<Flame size={15} />} value={`${tournament.buyInPoints} 积分`} />
+                <Info icon={<Trophy size={15} />} value={`盲注 ${tournament.blind}`} />
+              </div>
+              <button
+                disabled={disabled}
+                onClick={() => handleRegister(tournament.id, tournament.buyInPoints)}
+                className="mt-4 w-full rounded-2xl bg-[#1a1a1d] py-3 text-sm font-black text-amber-300 disabled:bg-[#d8c8b4] disabled:text-white"
+              >
+                {isRegistered ? '已报名' : isFull ? '名额已满' : '立即报名'}
+              </button>
+            </article>
+          );
         })}
-      </motion.div>
+      </section>
+    </div>
+  );
+}
+
+function Info({ icon, value }: { icon: ReactNode; value: string }) {
+  return (
+    <div className="flex items-center gap-2 rounded-2xl bg-[#f6f1e8] px-3 py-2 font-bold text-[#6f6255]">
+      {icon}
+      <span>{value}</span>
     </div>
   );
 }

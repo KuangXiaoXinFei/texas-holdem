@@ -1,0 +1,255 @@
+{
+  "users": [
+    {
+      "id": "u1",
+      "openId": "mock-openid-u1",
+      "name": "松山Aki",
+      "avatar": "https://api.dicebear.com/7.x/avataaars/svg?seed=Aki",
+      "level": "黑金会员",
+      "points": 13248,
+      "balanceRMB": 860,
+      "rankScore": 9628,
+      "checkinStreak": 4,
+      "lastCheckinDate": "2026-04-30",
+      "role": "admin"
+    },
+    {
+      "id": "u2",
+      "openId": "mock-openid-u2",
+      "name": "River Chen",
+      "avatar": "https://api.dicebear.com/7.x/avataaars/svg?seed=River",
+      "level": "铂金会员",
+      "points": 8400,
+      "balanceRMB": 300,
+      "rankScore": 8740,
+      "checkinStreak": 7,
+      "lastCheckinDate": null,
+      "role": "member"
+    },
+    {
+      "id": "u3",
+      "openId": "mock-openid-u3",
+      "name": "All-in May",
+      "avatar": "https://api.dicebear.com/7.x/avataaars/svg?seed=May",
+      "level": "黄金会员",
+      "points": 6200,
+      "balanceRMB": 180,
+      "rankScore": 8010,
+      "checkinStreak": 2,
+      "lastCheckinDate": null,
+      "role": "member"
+    },
+    {
+      "id": "u4",
+      "openId": "mock-openid-u4",
+      "name": "Button Leo",
+      "avatar": "https://api.dicebear.com/7.x/avataaars/svg?seed=Leo",
+      "level": "银卡会员",
+      "points": 4200,
+      "balanceRMB": 90,
+      "rankScore": 6760,
+      "checkinStreak": 1,
+      "lastCheckinDate": null,
+      "role": "member"
+    }
+  ],
+  "products": [
+    {
+      "id": "p1",
+      "name": "百威金尊",
+      "description": "冰镇即饮，适合短局开桌",
+      "pricePoints": 300,
+      "priceRMB": 30,
+      "image": "https://images.unsplash.com/photo-1614316053351-ab7d6f5fb846?q=80&w=400&auto=format&fit=crop",
+      "category": "drink",
+      "canStore": false
+    },
+    {
+      "id": "p2",
+      "name": "轩尼诗 VSOP",
+      "description": "700ml 干邑，可现场开瓶或存酒",
+      "pricePoints": 12000,
+      "priceRMB": 1288,
+      "image": "https://images.unsplash.com/photo-1569529465841-dfecdab7503a?q=80&w=400&auto=format&fit=crop",
+      "category": "bottle",
+      "canStore": true
+    },
+    {
+      "id": "p3",
+      "name": "麦卡伦 12 年",
+      "description": "单一麦芽威士忌，可寄存 60 天",
+      "pricePoints": 16000,
+      "priceRMB": 1688,
+      "image": "https://images.unsplash.com/photo-1569529465841-dfecdab7503a?q=80&w=400&auto=format&fit=crop",
+      "category": "bottle",
+      "canStore": true
+    },
+    {
+      "id": "p4",
+      "name": "至尊果盘",
+      "description": "应季鲜果，适合 4-6 人桌",
+      "pricePoints": 800,
+      "priceRMB": 88,
+      "image": "https://images.unsplash.com/photo-1546039907-7fa05f864c02?q=80&w=400&auto=format&fit=crop",
+      "category": "snack",
+      "canStore": false
+    },
+    {
+      "id": "p5",
+      "name": "炸物小吃拼盘",
+      "description": "薯条、鸡块、洋葱圈",
+      "pricePoints": 600,
+      "priceRMB": 68,
+      "image": "https://images.unsplash.com/photo-1626200419199-391ae4be7a41?q=80&w=400&auto=format&fit=crop",
+      "category": "snack",
+      "canStore": false
+    },
+    {
+      "id": "p6",
+      "name": "实体会员卡",
+      "description": "到店领取，绑定后享积分倍率",
+      "pricePoints": 6800,
+      "priceRMB": 699,
+      "image": "https://images.unsplash.com/photo-1556745757-8d76bdb6984b?q=80&w=400&auto=format&fit=crop",
+      "category": "card",
+      "canStore": false
+    }
+  ],
+  "tournaments": [
+    {
+      "id": "t1",
+      "name": "周五深筹积分赛",
+      "time": "今晚 20:00",
+      "buyInPoints": 2000,
+      "blind": "100/200",
+      "players": 24,
+      "maxPlayers": 45,
+      "status": "registering",
+      "prize": "冠军 18000 积分"
+    },
+    {
+      "id": "t2",
+      "name": "新人免费体验赛",
+      "time": "今晚 21:30",
+      "buyInPoints": 0,
+      "blind": "50/100",
+      "players": 16,
+      "maxPlayers": 24,
+      "status": "registering",
+      "prize": "前三名酒水券"
+    },
+    {
+      "id": "t3",
+      "name": "周末豪客桌",
+      "time": "明晚 19:30",
+      "buyInPoints": 10000,
+      "blind": "500/1000",
+      "players": 8,
+      "maxPlayers": 27,
+      "status": "registering",
+      "prize": "奖池按人数浮动"
+    }
+  ],
+  "registeredTournaments": [],
+  "storedDrinks": [
+    {
+      "id": "sd1",
+      "userId": "u1",
+      "name": "轩尼诗 VSOP",
+      "volumeLeft": "约 45%",
+      "storedDate": "2026-04-12",
+      "expiryDate": "2026-06-12",
+      "status": "requested"
+    },
+    {
+      "id": "sd2",
+      "userId": "u1",
+      "name": "麦卡伦 12 年",
+      "volumeLeft": "未开封",
+      "storedDate": "2026-04-22",
+      "expiryDate": "2026-06-22",
+      "status": "requested"
+    }
+  ],
+  "reservations": [
+    {
+      "id": "r_1777519704537_cfa693",
+      "userId": "u1",
+      "tableType": "标准德州桌",
+      "guests": 6,
+      "timeSlot": "今晚 20:00",
+      "status": "waiting",
+      "queueNo": 8,
+      "note": "小程序预约",
+      "createdAt": "2026-04-30 03:28"
+    },
+    {
+      "id": "r1",
+      "userId": "u1",
+      "tableType": "标准德州桌",
+      "guests": 6,
+      "timeSlot": "今晚 20:00",
+      "status": "waiting",
+      "queueNo": 7,
+      "note": "靠近吧台",
+      "createdAt": "2026-04-30 18:10"
+    }
+  ],
+  "orders": [
+    {
+      "id": "o1",
+      "userId": "u1",
+      "items": [
+        {
+          "name": "百威金尊",
+          "quantity": 2,
+          "priceRMB": 30,
+          "pricePoints": 300
+        }
+      ],
+      "totalRMB": 60,
+      "totalPoints": 600,
+      "paidBy": "balance",
+      "status": "served",
+      "createdAt": "2026-04-29 22:18"
+    }
+  ],
+  "staffTasks": [
+    {
+      "id": "task_1777519734219_a6ccab",
+      "type": "drink",
+      "title": "提酒：松山Aki",
+      "subtitle": "轩尼诗 VSOP，剩余 约 45%",
+      "refId": "sd1",
+      "status": "pending",
+      "createdAt": "2026-04-30 03:28"
+    },
+    {
+      "id": "task_1777519730364_d1c5d3",
+      "type": "drink",
+      "title": "提酒：松山Aki",
+      "subtitle": "麦卡伦 12 年，剩余 未开封",
+      "refId": "sd2",
+      "status": "pending",
+      "createdAt": "2026-04-30 03:28"
+    },
+    {
+      "id": "task_1777519704537_becfd0",
+      "type": "seat",
+      "title": "确认入座：松山Aki",
+      "subtitle": "标准德州桌 6 人，今晚 20:00",
+      "refId": "r_1777519704537_cfa693",
+      "status": "pending",
+      "createdAt": "2026-04-30 03:28"
+    },
+    {
+      "id": "task1",
+      "type": "seat",
+      "title": "确认入座：松山Aki",
+      "subtitle": "标准德州桌 6 人，今晚 20:00",
+      "refId": "r1",
+      "status": "pending",
+      "createdAt": "2026-04-30 18:10"
+    }
+  ]
+}

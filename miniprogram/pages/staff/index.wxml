@@ -1,0 +1,16 @@
+<view class="page">
+  <view class="hero red">
+    <view class="eyebrow">Staff Console</view>
+    <view class="hero-title">员工端核销</view>
+    <view class="hero-subtitle">确认入座、出品订单、提酒核销都通过云函数更新云数据库。</view>
+  </view>
+
+  <block wx:for="{{staffTasks}}" wx:key="_id">
+    <view class="card task">
+      <view class="task-title">{{item.title}}</view>
+      <view class="muted">{{item.subtitle}}</view>
+      <view class="muted">{{item.createdAt}} · {{item.status}}</view>
+      <button wx:if="{{item.status === 'pending'}}" class="primary-btn" bindtap="complete" data-id="{{item._id}}">确认完成</button>
+    </view>
+  </block>
+</view>

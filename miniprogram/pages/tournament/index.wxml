@@ -1,0 +1,28 @@
+<view class="page">
+  <view class="hero green">
+    <view class="eyebrow">Leaderboard</view>
+    <view class="hero-title">赛事与排行</view>
+    <view class="hero-subtitle">报名扣积分，成绩积分进入榜单。</view>
+  </view>
+
+  <view class="card block">
+    <view class="section-title">本周排行榜</view>
+    <block wx:for="{{leaderboard}}" wx:key="_id">
+      <view class="rank-row">
+        <text class="rank-no">{{index + 1}}</text>
+        <image class="avatar" src="{{item.avatar}}" mode="aspectFill" />
+        <text class="rank-name">{{item.name}}</text>
+        <text class="score">{{item.rankScore}}</text>
+      </view>
+    </block>
+  </view>
+
+  <block wx:for="{{tournaments}}" wx:key="_id">
+    <view class="card block">
+      <view class="tour-title">{{item.name}}</view>
+      <view class="muted">{{item.time}} · 盲注 {{item.blind}}</view>
+      <view class="tour-meta">{{item.players}}/{{item.maxPlayers}} 人 · {{item.buyInPoints}} 积分 · {{item.prize}}</view>
+      <button class="primary-btn" bindtap="register" data-id="{{item._id}}">立即报名</button>
+    </view>
+  </block>
+</view>

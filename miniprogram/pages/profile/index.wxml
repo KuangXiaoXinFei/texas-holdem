@@ -1,0 +1,49 @@
+<view class="page">
+  <view class="hero">
+    <view class="hero-title">{{user.name || '会员'}}</view>
+    <view class="hero-subtitle">{{user.level}} · {{user.points}} 积分 · ¥{{user.balanceRMB}}</view>
+  </view>
+
+  <view class="amounts">
+    <block wx:for="{{amounts}}" wx:key="*this">
+      <button class="secondary-btn" bindtap="recharge" data-amount="{{item}}">充 {{item}}</button>
+    </block>
+  </view>
+
+  <view class="card block">
+    <view class="section-title">预约 / 候桌</view>
+    <picker mode="selector" range="{{tableTypes}}" bindchange="setField" data-key="tableType" data-source="tableTypes">
+      <view class="picker">桌型：{{tableType}}</view>
+    </picker>
+    <picker mode="selector" range="{{guestOptions}}" bindchange="setField" data-key="guests" data-source="guestOptions">
+      <view class="picker">人数：{{guests}}</view>
+    </picker>
+    <picker mode="selector" range="{{timeSlots}}" bindchange="setField" data-key="timeSlot" data-source="timeSlots">
+      <view class="picker">时间：{{timeSlot}}</view>
+    </picker>
+    <button class="primary-btn" bindtap="reserve">提交预约</button>
+    <block wx:for="{{reservations}}" wx:key="_id">
+      <view class="record">#{{item.queueNo}} {{item.tableType}} · {{item.status}}</view>
+    </block>
+  </view>
+
+  <view class="card block">
+    <view class="section-title">我的存酒</view>
+    <block wx:for="{{storedDrinks}}" wx:key="_id">
+      <view class="drink-row">
+        <view>
+          <view class="strong">{{item.name}}</view>
+          <view class="muted">剩余 {{item.volumeLeft}} · 至 {{item.expiryDate}}</view>
+        </view>
+        <button bindtap="requestDrink" data-id="{{item._id}}" disabled="{{item.status !== 'stored'}}">{{item.status === 'stored' ? '提取' : item.status}}</button>
+      </view>
+    </block>
+  </view>
+
+  <view class="card block">
+    <view class="section-title">最近订单</view>
+    <block wx:for="{{orders}}" wx:key="_id">
+      <view class="record">{{item.createdAt}} · {{item.status}} · ¥{{item.totalRMB}}</view>
+    </block>
+  </view>
+</view>

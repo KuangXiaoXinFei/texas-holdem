@@ -1,0 +1,78 @@
+.stats {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 16rpx;
+  margin-top: 24rpx;
+}
+
+.stats view {
+  display: flex;
+  flex-direction: column;
+  gap: 8rpx;
+  font-size: 28rpx;
+  font-weight: 900;
+}
+
+.stats .muted {
+  font-size: 22rpx;
+  font-weight: 700;
+}
+
+.action-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 16rpx;
+  margin: 24rpx 0;
+}
+
+.action {
+  height: 128rpx;
+  border-radius: 28rpx;
+  background: #fffaf1;
+  border: 1rpx solid #eadcc7;
+  color: #2b2521;
+  font-size: 24rpx;
+  font-weight: 900;
+  line-height: 128rpx;
+  padding: 0;
+}
+
+.rank-row {
+  display: flex;
+  align-items: center;
+  gap: 18rpx;
+  padding: 16rpx 0;
+}
+
+.rank-no {
+  width: 48rpx;
+  height: 48rpx;
+  border-radius: 50%;
+  background: #1a1a1d;
+  color: #f4c46a;
+  text-align: center;
+  line-height: 48rpx;
+  font-weight: 900;
+}
+
+.avatar {
+  width: 64rpx;
+  height: 64rpx;
+  border-radius: 50%;
+  background: #f0e4d3;
+}
+
+.rank-main {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 6rpx;
+  font-size: 28rpx;
+  font-weight: 900;
+}
+
+.score {
+  color: #163b34;
+  font-size: 28rpx;
+  font-weight: 900;
+}

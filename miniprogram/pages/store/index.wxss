@@ -1,0 +1,78 @@
+.product {
+  display: grid;
+  grid-template-columns: 180rpx 1fr;
+  gap: 22rpx;
+  margin-top: 22rpx;
+}
+
+.cover {
+  width: 180rpx;
+  height: 180rpx;
+  border-radius: 28rpx;
+  background: #f0e4d3;
+}
+
+.product-main {
+  min-width: 0;
+}
+
+.name {
+  font-size: 32rpx;
+  font-weight: 900;
+}
+
+.desc {
+  margin: 10rpx 0;
+  color: #8a7a69;
+  font-size: 24rpx;
+  line-height: 1.45;
+}
+
+.price {
+  margin-bottom: 14rpx;
+  color: #b76e22;
+  font-size: 26rpx;
+  font-weight: 900;
+}
+
+.cart {
+  position: sticky;
+  bottom: 18rpx;
+  margin-top: 24rpx;
+}
+
+.cart-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 14rpx 0;
+  font-size: 26rpx;
+  font-weight: 800;
+}
+
+.cart-row button {
+  width: 56rpx;
+  height: 56rpx;
+  border-radius: 50%;
+  background: #f0e4d3;
+  line-height: 56rpx;
+}
+
+.pay-row {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 16rpx;
+  margin: 20rpx 0;
+}
+
+.pay {
+  border-radius: 22rpx;
+  background: #f0e4d3;
+  color: #2b2521;
+  font-weight: 900;
+}
+
+.pay.active {
+  background: #1a1a1d;
+  color: #f4c46a;
+}

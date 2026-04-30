@@ -1,0 +1,30 @@
+{
+  "pages": [
+    "pages/home/index",
+    "pages/store/index",
+    "pages/tournament/index",
+    "pages/profile/index",
+    "pages/staff/index"
+  ],
+  "window": {
+    "navigationBarTitleText": "RIVER ACE",
+    "navigationBarBackgroundColor": "#1a1a1d",
+    "navigationBarTextStyle": "white",
+    "backgroundColor": "#f6f1e8"
+  },
+  "tabBar": {
+    "color": "#8a7a69",
+    "selectedColor": "#b76e22",
+    "backgroundColor": "#fffaf1",
+    "borderStyle": "black",
+    "list": [
+      { "pagePath": "pages/home/index", "text": "首页" },
+      { "pagePath": "pages/store/index", "text": "点单" },
+      { "pagePath": "pages/tournament/index", "text": "赛事" },
+      { "pagePath": "pages/profile/index", "text": "我的" },
+      { "pagePath": "pages/staff/index", "text": "员工" }
+    ]
+  },
+  "style": "v2",
+  "sitemapLocation": "sitemap.json"
+}

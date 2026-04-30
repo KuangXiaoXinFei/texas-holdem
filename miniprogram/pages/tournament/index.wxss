@@ -1,0 +1,54 @@
+.green {
+  background: #163b34;
+}
+
+.block {
+  margin-top: 24rpx;
+}
+
+.rank-row {
+  display: flex;
+  align-items: center;
+  gap: 18rpx;
+  padding: 14rpx 0;
+}
+
+.rank-no {
+  width: 48rpx;
+  height: 48rpx;
+  border-radius: 50%;
+  background: #1a1a1d;
+  color: #f4c46a;
+  text-align: center;
+  line-height: 48rpx;
+  font-weight: 900;
+}
+
+.avatar {
+  width: 60rpx;
+  height: 60rpx;
+  border-radius: 50%;
+}
+
+.rank-name {
+  flex: 1;
+  font-size: 28rpx;
+  font-weight: 900;
+}
+
+.score {
+  color: #163b34;
+  font-weight: 900;
+}
+
+.tour-title {
+  font-size: 34rpx;
+  font-weight: 900;
+}
+
+.tour-meta {
+  margin: 18rpx 0;
+  color: #b76e22;
+  font-size: 26rpx;
+  font-weight: 900;
+}

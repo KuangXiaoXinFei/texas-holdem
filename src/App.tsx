@@ -1,113 +1,115 @@
-/**
- * @license
- * SPDX-License-Identifier: Apache-2.0
- */
-
-import { useState, ReactNode } from 'react';
-import { Home, Trophy, User as UserIcon, ShoppingCart } from 'lucide-react';
-import { motion, AnimatePresence } from 'motion/react';
+import { ReactNode, useState } from 'react';
+import { CalendarClock, Crown, Home, ListChecks, ShoppingBag, Sparkles, Trophy, UserRound } from 'lucide-react';
+import { AnimatePresence, motion } from 'motion/react';
 import { AppProvider, useAppContext } from './store';
+import HomeScreen from './screens/HomeScreen';
 import StoreScreen from './screens/StoreScreen';
 import TournamentScreen from './screens/TournamentScreen';
 import ProfileScreen from './screens/ProfileScreen';
+import StaffScreen from './screens/StaffScreen';
 import CartModal from './components/CartModal';
 
-function MainApp() {
-  const [activeTab, setActiveTab] = useState<'store' | 'tournaments' | 'profile'>('store');
-  const [isCartOpen, setIsCartOpen] = useState(false);
-  const { cart } = useAppContext();
+export type TabKey = 'home' | 'store' | 'tournaments' | 'profile' | 'staff';
 
+function MainApp() {
+  const [activeTab, setActiveTab] = useState<TabKey>('home');
+  const [isCartOpen, setIsCartOpen] = useState(false);
+  const { cart, loading, user } = useAppContext();
   const totalCartItems = cart.reduce((sum, item) => sum + item.quantity, 0);
 
   return (
-    <div className="flex h-screen w-full justify-center bg-gray-100 overflow-hidden font-sans text-gray-900">
-      {/* Mobile Simulator Container */}
-      <div className="relative h-full w-full max-w-md bg-gray-50 flex flex-col shadow-2xl overflow-hidden">
-        
-        {/* Top Header */}
-        <header className="bg-zinc-900 text-white px-4 pt-12 pb-4 flex justify-between items-center z-10 sticky top-0 shadow-md">
-          <h1 className="text-xl font-bold tracking-wider">ACE CLUB</h1>
-          {activeTab === 'store' && (
-             <button 
-                onClick={() => setIsCartOpen(true)}
-                className="relative p-2 rounded-full hover:bg-zinc-800 transition-colors"
-              >
-               <ShoppingCart size={24} />
-               <AnimatePresence>
-                 {totalCartItems > 0 && (
-                   <motion.span 
-                     initial={{ scale: 0 }}
-                     animate={{ scale: 1 }}
-                     exit={{ scale: 0 }}
-                     className="absolute top-0 right-0 bg-red-500 text-white text-xs font-bold w-5 h-5 flex items-center justify-center rounded-full transform translate-x-1 -translate-y-1"
-                   >
-                     {totalCartItems}
-                   </motion.span>
-                 )}
-               </AnimatePresence>
-             </button>
-          )}
+    <div className="min-h-screen w-full bg-[#171719] text-slate-950 sm:py-4">
+      <div className="mx-auto flex min-h-screen w-full max-w-md flex-col overflow-hidden bg-[#f6f1e8] shadow-2xl sm:min-h-[860px] sm:rounded-[28px]">
+        <header className="relative overflow-hidden bg-[#1a1a1d] px-5 pb-5 pt-12 text-white">
+          <div className="absolute inset-0 opacity-60">
+            <div className="absolute left-[-80px] top-[-80px] h-48 w-48 rounded-full bg-amber-500/25 blur-3xl" />
+            <div className="absolute bottom-[-80px] right-[-60px] h-44 w-44 rounded-full bg-emerald-400/20 blur-3xl" />
+          </div>
+          <div className="relative flex items-center justify-between">
+            <div>
+              <p className="text-xs font-semibold uppercase tracking-[0.35em] text-amber-300">Texas Lounge</p>
+              <h1 className="mt-2 text-2xl font-black tracking-wide">RIVER ACE 酒吧</h1>
+            </div>
+            <button
+              onClick={() => setIsCartOpen(true)}
+              className="relative flex h-11 w-11 items-center justify-center rounded-full border border-white/15 bg-white/10 text-amber-200 backdrop-blur"
+              aria-label="打开购物车"
+            >
+              <ShoppingBag size={21} />
+              <AnimatePresence>
+                {totalCartItems > 0 && (
+                  <motion.span
+                    initial={{ scale: 0 }}
+                    animate={{ scale: 1 }}
+                    exit={{ scale: 0 }}
+                    className="absolute -right-1 -top-1 flex h-5 min-w-5 items-center justify-center rounded-full bg-[#e14d2a] px-1 text-[11px] font-black text-white"
+                  >
+                    {totalCartItems}
+                  </motion.span>
+                )}
+              </AnimatePresence>
+            </button>
+          </div>
+          <div className="relative mt-5 grid grid-cols-3 gap-2 rounded-2xl border border-white/10 bg-black/20 p-2 backdrop-blur">
+            <Metric label="积分" value={user ? user.points.toLocaleString() : '-'} />
+            <Metric label="余额" value={user ? `¥${user.balanceRMB}` : '-'} />
+            <Metric label="等级" value={user?.level ?? '-'} />
+          </div>
         </header>
 
-        {/* Scrollable Content Area */}
-        <main className="flex-1 overflow-y-auto w-full pb-20 scroll-smooth relative no-scrollbar">
-          <AnimatePresence mode="wait">
-            <motion.div
-              key={activeTab}
-              initial={{ opacity: 0, x: 20 }}
-              animate={{ opacity: 1, x: 0 }}
-              exit={{ opacity: 0, x: -20 }}
-              transition={{ duration: 0.2 }}
-              className="absolute inset-0"
-            >
-              <div className="h-full overflow-y-auto pb-24">
+        <main className="relative flex-1 overflow-y-auto pb-24 no-scrollbar">
+          {loading ? (
+            <div className="flex h-full min-h-[520px] flex-col items-center justify-center gap-3 text-[#7a6c5f]">
+              <Sparkles className="animate-pulse text-amber-500" />
+              <span className="text-sm font-semibold">正在连接本地云服务...</span>
+            </div>
+          ) : (
+            <AnimatePresence mode="wait">
+              <motion.div
+                key={activeTab}
+                initial={{ opacity: 0, y: 12 }}
+                animate={{ opacity: 1, y: 0 }}
+                exit={{ opacity: 0, y: -12 }}
+                transition={{ duration: 0.18 }}
+              >
+                {activeTab === 'home' && <HomeScreen setActiveTab={setActiveTab} />}
                 {activeTab === 'store' && <StoreScreen />}
                 {activeTab === 'tournaments' && <TournamentScreen />}
                 {activeTab === 'profile' && <ProfileScreen />}
-              </div>
-            </motion.div>
-          </AnimatePresence>
+                {activeTab === 'staff' && <StaffScreen />}
+              </motion.div>
+            </AnimatePresence>
+          )}
         </main>
 
-        {/* Bottom Navigation */}
-        <nav className="absolute bottom-0 w-full bg-white border-t border-gray-200 flex justify-around items-center pt-2 px-2 z-20 pb-safe shadow-[0_-10px_20px_rgba(0,0,0,0.05)]">
-          <NavItem 
-            icon={<Home size={24} />} 
-            label="门店" 
-            isActive={activeTab === 'store'} 
-            onClick={() => setActiveTab('store')} 
-          />
-          <NavItem 
-            icon={<Trophy size={24} />} 
-            label="赛事" 
-            isActive={activeTab === 'tournaments'} 
-            onClick={() => setActiveTab('tournaments')} 
-          />
-          <NavItem 
-            icon={<UserIcon size={24} />} 
-            label="我的" 
-            isActive={activeTab === 'profile'} 
-            onClick={() => setActiveTab('profile')} 
-          />
+        <nav className="fixed bottom-0 left-1/2 z-30 grid w-full max-w-md -translate-x-1/2 grid-cols-5 border-t border-black/10 bg-[#fffaf1]/95 px-2 pb-[max(env(safe-area-inset-bottom),10px)] pt-2 shadow-[0_-16px_36px_rgba(0,0,0,0.12)] backdrop-blur sm:bottom-4 sm:rounded-b-[28px]">
+          <NavItem icon={<Home size={22} />} label="首页" active={activeTab === 'home'} onClick={() => setActiveTab('home')} />
+          <NavItem icon={<ShoppingBag size={22} />} label="点单" active={activeTab === 'store'} onClick={() => setActiveTab('store')} />
+          <NavItem icon={<Trophy size={22} />} label="赛事" active={activeTab === 'tournaments'} onClick={() => setActiveTab('tournaments')} />
+          <NavItem icon={<UserRound size={22} />} label="我的" active={activeTab === 'profile'} onClick={() => setActiveTab('profile')} />
+          <NavItem icon={<ListChecks size={22} />} label="员工" active={activeTab === 'staff'} onClick={() => setActiveTab('staff')} />
         </nav>
 
-        {/* Modals */}
-        <AnimatePresence>
-          {isCartOpen && <CartModal onClose={() => setIsCartOpen(false)} />}
-        </AnimatePresence>
+        <AnimatePresence>{isCartOpen && <CartModal onClose={() => setIsCartOpen(false)} />}</AnimatePresence>
       </div>
     </div>
   );
 }
 
-function NavItem({ icon, label, isActive, onClick }: { icon: ReactNode, label: string, isActive: boolean, onClick: () => void }) {
+function Metric({ label, value }: { label: string; value: string }) {
   return (
-    <button 
-      onClick={onClick}
-      className={`flex flex-col items-center justify-center w-16 h-12 transition-colors ${isActive ? 'text-amber-500' : 'text-gray-400 hover:text-gray-600'}`}
-    >
-      <div className="mb-1">{icon}</div>
-      <span className="text-[10px] font-medium">{label}</span>
+    <div className="rounded-xl bg-white/10 px-3 py-2">
+      <p className="text-[10px] font-semibold text-white/55">{label}</p>
+      <p className="mt-1 truncate text-sm font-black text-white">{value}</p>
+    </div>
+  );
+}
+
+function NavItem({ icon, label, active, onClick }: { icon: ReactNode; label: string; active: boolean; onClick: () => void }) {
+  return (
+    <button onClick={onClick} className={`flex h-14 flex-col items-center justify-center gap-1 rounded-2xl text-[11px] font-bold transition ${active ? 'bg-[#1a1a1d] text-amber-300' : 'text-[#8a7a69]'}`}>
+      {icon}
+      <span>{label}</span>
     </button>
   );
 }
